@@ -42,7 +42,7 @@ addpath('aux/lib')
 SOURCE = 'haver';   % 'public' or 'haver'
 
 % Haver: REQUIRED if SOURCE='haver'.
-HAVER_KEY = '7bCtsOfwsIGhNIkzqtHOqvjtoOpyX79gTgIXolH_vQk';
+HAVER_KEY = '';
 if strcmp(SOURCE,'haver') && isempty(HAVER_KEY)
     error('Set HAVER_KEY at the top of this script to use SOURCE=''haver''.');
 end

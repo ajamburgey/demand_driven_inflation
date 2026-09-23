@@ -22,7 +22,7 @@ addpath('aux/lib')
 SOURCE = 'haver';   % 'public' or 'haver'
 
 % Haver: REQUIRED if SOURCE='haver'.
-HAVER_KEY = '7bCtsOfwsIGhNIkzqtHOqvjtoOpyX79gTgIXolH_vQk';
+HAVER_KEY = '';
 if strcmp(SOURCE,'haver') && isempty(HAVER_KEY)
     error('Set HAVER_KEY at the top of this script to use SOURCE=''haver''.');
 end
@@ -30,7 +30,7 @@ end
 % BLS (SOURCE='public' only): optional. Put your own registered key here
 % (https://data.bls.gov/registrationEngine/) for higher rate limits. Leave
 % empty to use BLS's own public, unregistered tier automatically.
-BLS_KEY = '0043949c238d4cc6b9935ba7ce9c0e35';
+BLS_KEY = '';
 if isempty(BLS_KEY)
     BLS_KEY = 'public';   % blspanel.m's own sentinel for the unregistered tier
 end
