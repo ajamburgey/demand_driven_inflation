@@ -37,6 +37,10 @@ The prepared data and cached draws used by the paper are included in the reposit
 
 The draw scripts estimate the relevant models and save posterior draws in `draws/*.mat`. These files contain the computationally expensive estimation results that the figure and table scripts reuse, so the figures and tables do not need to rerun the MCMC each time.
 
+### Descriptive
+
+Run `Figure1.m` and `Figure4.m`.
+
 ### VAR
 
 The three VAR draw scripts estimate Bayesian VARs using the included data, impose the paper’s sign restrictions, and save accepted posterior draws for subsequent figures:
@@ -58,10 +62,6 @@ Run `GetDSGEDraws.m`, then run `Figure8.m`, `Table1.m`, and `Table2.m`. If `data
 ### Realtime
 
 Run `Figure9.m` and `Figure10.m`.
-
-### Descriptive
-
-Run `Figure1.m` and `Figure4.m` using the included prepared data.
 
 ## 4. Building the data from scratch
 
