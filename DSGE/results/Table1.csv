@@ -1,0 +1,7 @@
+Panel A. Varying the response to inflation
+phi_pi,1.05,1.50,2.00,2.48,3.00,5.00
+Demand share,0.82,0.85,0.88,0.90,0.92,0.95
+
+Panel B. Varying the response to the output gap
+phi_Y,0.00,0.16,0.40,0.60,0.80,1.00
+Demand share,1.08,0.90,0.67,0.52,0.42,0.34
