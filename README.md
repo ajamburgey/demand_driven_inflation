@@ -33,23 +33,27 @@ Third-party packages are vendored alongside `aux/`, rather than inside it. Examp
 
 ## 3. Reproducing the figures and tables
 
-The prepared data and cached draws used by the paper are included in the repository. We cache the posterior and prior draws in `draws/*.mat` so that multiple figures and tables can reuse them without rerunning the MCMC. Run scripts from within their own folder for the relative path structure to work properly.
+The prepared data and cached draws used by the paper are included in the repository. Run scripts from within their own folder, since they use paths relative to that folder.
+
+The draw scripts estimate the relevant models and save posterior draws in `draws/*.mat`. These files contain the computationally expensive estimation results that the figure and table scripts reuse, so the figures and tables do not need to rerun the MCMC each time.
 
 ### VAR
 
-Run:
+The three VAR draw scripts estimate Bayesian VARs using the included data, impose the paper’s sign restrictions, and save accepted posterior draws for subsequent figures:
 
-- `GetVARDraws.m` → `draws/PQus_draws.mat`, `draws/PQea_draws.mat` (used by `Figure2.m`, `Figure3.m`, and `Figure12.m`).
-- `GetVARDrawsHT.m` → `draws/PQHTus_draws.mat`, `draws/PQHTea_draws.mat` (used by `Figure5.m` and `Figure13.m`).
-- `GetVARDrawsRF.m` → `draws/PQRFus_draws.mat`, `draws/PQRFea_draws.mat` (used by `Figure6.m` and `Figure14.m`).
+- `GetVARDraws.m` estimates the two-variable GDP-price VAR for the United States and euro area, identifying demand and supply shocks. It saves `draws/PQus_draws.mat` and `draws/PQea_draws.mat`, used by `Figure2.m`, `Figure3.m`, and `Figure12.m`.
+- `GetVARDrawsHT.m` estimates the GDP, prices-ex-energy, transport-energy, and household-energy VAR. It identifies demand, non-energy supply, and two energy-supply shocks using sign and additional energy-price restrictions. It saves `draws/PQHTus_draws.mat` and `draws/PQHTea_draws.mat`, used by `Figure5.m` and `Figure13.m`.
+- `GetVARDrawsRF.m` estimates the GDP, CPI, interest-rate, and primary-deficit VAR. It identifies monetary-policy, fiscal-policy, other-demand, and supply shocks. It saves `draws/PQRFus_draws.mat` and `draws/PQRFea_draws.mat`, used by `Figure6.m` and `Figure14.m`.
 
-Then run `Figure2.m`, `Figure3.m`, `Figure5.m`, `Figure6.m`, `Figure13.m`, and `Figure14.m`. `Figure11.m` and `Figure12.m` run their smaller estimations inline; `Figure12.m` also uses the baseline draws from `draws/PQus_draws.mat`.
+After the relevant draw script has run, execute `Figure2.m`, `Figure3.m`, `Figure5.m`, `Figure6.m`, `Figure13.m`, and `Figure14.m`. `Figure11.m` and `Figure12.m` run smaller estimations inline; `Figure12.m` also uses the baseline draws from `draws/PQus_draws.mat`.
 
 `Figure3.m` additionally uses the included `data/SWcovid_quarterly.mat` file.
 
 ### DSGE
 
-Run `GetDSGEDraws.m` to create `draws/DSGE_draws.mat`, then run `Figure8.m`, `Table1.m`, and `Table2.m`.
+`GetDSGEDraws.m` estimates the DSGE model. It first refines the posterior mode, then runs an MCMC chain to obtain posterior parameter draws and computes the model objects and smoothed states needed by the analysis. It saves these results in `draws/DSGE_draws.mat`.
+
+Run `GetDSGEDraws.m`, then run `Figure8.m`, `Table1.m`, and `Table2.m`. If `data/DSGEData.mat` does not exist, build it as described in Section 4 first.
 
 ### Realtime
 
@@ -57,7 +61,7 @@ Run `Figure9.m` and `Figure10.m`.
 
 ### Descriptive
 
-Run `Figure1.m` and `Figure4.m`.
+Run `Figure1.m` and `Figure4.m` using the included prepared data.
 
 ## 4. Building the data from scratch
 
@@ -81,7 +85,7 @@ SOURCE = 'haver';   % 'public' or 'haver'
 ```
 
 - **`haver`** uses Haver Analytics and requires a valid `HAVER_KEY`.
-- **`public`** uses free public sources: the BLS public API for US series and DBnomics, ECB, Eurostat, and FRED for the remaining series. A `BLS_KEY` can be supplied for the BLS API (suggested for higher data rate limits).
+- **`public`** uses free public sources: the BLS public API for US series and DBnomics, ECB, Eurostat, and FRED for the remaining series. A `BLS_KEY` can be supplied for the BLS API.
 
 The corresponding `Prepare*Data.m` scripts have their own `SOURCE` switch, so fetching and preparation can be performed separately. DSGE and Realtime use free public sources only.
 
