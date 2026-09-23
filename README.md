@@ -51,7 +51,7 @@ After the relevant draw script has run, execute `Figure2.m`, `Figure3.m`, `Figur
 
 ### DSGE
 
-`GetDSGEDraws.m` estimates the DSGE model. It first refines the posterior mode, then runs an MCMC chain to obtain posterior parameter draws and computes the model objects and smoothed states needed by the analysis. It saves these results in `draws/DSGE_draws.mat`.
+`GetDSGEDraws.m` estimates the DSGE model. It first estimates the posterior mode, then runs an MCMC chain to obtain posterior parameter draws and computes the model objects and smoothed states needed by the analysis. It saves these results in `draws/DSGE_draws.mat`.
 
 Run `GetDSGEDraws.m`, then run `Figure8.m`, `Table1.m`, and `Table2.m`. If `data/DSGEData.mat` does not exist, build it as described in Section 4 first.
 
