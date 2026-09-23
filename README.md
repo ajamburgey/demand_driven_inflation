@@ -4,7 +4,7 @@ This repository contains the replication code for Domenico Giannone and Giorgio 
 
 ## 1. Software requirements
 
-- **MATLAB.** The code was most recently run with MATLAB R2025b on a Mac, but should run on other reasonably recent releases.
+- **MATLAB.** The code was most recently run with MATLAB R2025b on macOS Tahoe (v26.5.2).
 - **Statistics and Machine Learning Toolbox.** This is the only MATLAB toolbox required; it provides functions such as `mvnrnd`, `gamrnd`, `ksdensity`, and `prctile` used in the Bayesian VAR and DSGE code.
 - **Internet access** is required only to fetch data. Estimation and output scripts run offline using the data included in the repository.
 
