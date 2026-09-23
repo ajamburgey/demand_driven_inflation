@@ -33,9 +33,7 @@ Third-party packages are vendored alongside `aux/`, rather than inside it. Examp
 
 ## 3. Reproducing the figures and tables
 
-The prepared data and cached draws used by the paper are included in the repository. Run scripts from within their own folder, since they use paths relative to that folder.
-
-We cache the posterior and prior draws in `draws/*.mat` so that multiple figures and tables can reuse them without rerunning the MCMC.
+The prepared data and cached draws used by the paper are included in the repository. We cache the posterior and prior draws in `draws/*.mat` so that multiple figures and tables can reuse them without rerunning the MCMC. Run scripts from within their own folder for the relative path structure to work properly.
 
 ### VAR
 
@@ -55,11 +53,11 @@ Run `GetDSGEDraws.m` to create `draws/DSGE_draws.mat`, then run `Figure8.m`, `Ta
 
 ### Realtime
 
-Run `Figure9.m` and `Figure10.m` using the included real-time data. No API key is needed; the sources (Philadelphia Fed, ALFRED, FRED, and ECB/Eurostat) are public.
+Run `Figure9.m` and `Figure10.m`.
 
 ### Descriptive
 
-The descriptive scripts use the included `VAR/data/VARData.mat` and `Descriptive/data/DataChart.mat` files. Run `Figure1.m` and `Figure4.m`.
+Run `Figure1.m` and `Figure4.m`.
 
 ## 4. Building the data from scratch
 
@@ -74,7 +72,7 @@ The main data pipelines are:
 - **VAR COVID factor:** `GetSWfactor.m` → `PrepareSWfactor.m` → `data/SWcovid_quarterly.mat`.
 - **DSGE:** `GetDSGEData.m` → `PrepareDSGEData.m` → `data/DSGEData.mat`.
 - **Realtime:** `GetRealTimeData.m` → `PrepareRealTimeData.m` → `data/CPIvintages.mat` and the real-time projections `.mat` file.
-- **Descriptive:** `GetChartData.m` → `PrepareChartData.m` → `data/DataChart.mat`; this pipeline also requires `VAR/data/VARData.mat`.
+- **Descriptive:** `GetChartData.m` → `PrepareChartData.m` → `data/DataChart.mat`.
 
 `VAR/GetVARData.m` and `Descriptive/GetChartData.m` support two data sources:
 
@@ -83,7 +81,7 @@ SOURCE = 'haver';   % 'public' or 'haver'
 ```
 
 - **`haver`** uses Haver Analytics and requires a valid `HAVER_KEY`.
-- **`public`** uses free public sources: the BLS public API for US series and DBnomics, ECB, Eurostat, and FRED for the remaining series. A `BLS_KEY` can be supplied for the BLS API.
+- **`public`** uses free public sources: the BLS public API for US series and DBnomics, ECB, Eurostat, and FRED for the remaining series. A `BLS_KEY` can be supplied for the BLS API (suggested for higher data rate limits).
 
 The corresponding `Prepare*Data.m` scripts have their own `SOURCE` switch, so fetching and preparation can be performed separately. DSGE and Realtime use free public sources only.
 
@@ -97,7 +95,7 @@ For a detailed comparison, see [`VAR/data/HaverPublicComparison_EAEnergy.xlsx`](
 
 This repository vendors the following packages, unmodified except for removing unrelated functions:
 
-- **`VAR/GLP_PrePostCovid_ConstantCoeff/`** — the Minnesota-prior Bayesian VAR package used for posterior draws. Please cite:
+- **`VAR/GLP_PrePostCovid_ConstantCoeff/`** — the Bayesian VAR package used for posterior draws. Please cite:
 
   > Domenico Giannone, Michele Lenza and Giorgio E. Primiceri (2015), “Prior Selection for Vector Autoregressions,” *The Review of Economics and Statistics*, 97(2), 436–451.
 
