@@ -1,11 +1,11 @@
 # Demand-Driven Inflation
 
-This repository contains the replication code for Domenico Giannone and Giorgio E. Primiceri (2026), “Demand Driven Inflation,” *Brookings Papers on Economic Activity*.
+This repository contains the replication code for Domenico Giannone and Giorgio E. Primiceri (2026), ["Demand Driven Inflation,"](https://www.brookings.edu/wp-content/uploads/2026/09/5_GiannonePrimicer.pdf) *Brookings Papers on Economic Activity*.
 
 ## 1. Software requirements
 
 - **MATLAB.** The code was most recently run with MATLAB R2025b on macOS Tahoe (v26.5.2).
-- **Statistics and Machine Learning Toolbox.** This is the only MATLAB toolbox required; it provides functions such as `mvnrnd`, `gamrnd`, `ksdensity`, and `prctile` used in the Bayesian VAR and DSGE code.
+- **Statistics and Machine Learning Toolbox.** This is the only MATLAB toolbox required; it provides functions such as `mvnrnd`, `gamrnd`, `ksdensity`, and `prctile` used in the Bayesian VAR and DSGE models.
 - **Internet access** is required only to fetch data. Estimation and output scripts run offline using the data included in the repository.
 
 No other installation is required. Third-party MATLAB packages are vendored in the repository; see Section 6.
@@ -35,7 +35,7 @@ Third-party packages are vendored alongside `aux/`, rather than inside it. Examp
 
 The prepared data and cached draws used by the paper are included in the repository. Run scripts from within their own folder, since they use paths relative to that folder.
 
-The draw scripts estimate the relevant models and save posterior draws in `draws/*.mat`. These files contain the computationally expensive estimation results that the figure and table scripts reuse, so the figures and tables do not need to rerun the MCMC each time.
+The draw scripts estimate the relevant models and save posterior draws in `draws/*.mat`. These files contain the computationally expensive estimation results that the figure and table scripts reuse, so that figures and tables can be regenerated quickly.
 
 ### Descriptive
 
@@ -43,19 +43,19 @@ Run `Figure1.m` and `Figure4.m`.
 
 ### VAR
 
-The three VAR draw scripts estimate Bayesian VARs using the included data, impose the paper’s sign restrictions, and save accepted posterior draws for subsequent figures:
+The three VAR draw scripts estimate Bayesian VARs using the included data, impose the paper's sign restrictions, and save accepted posterior draws for subsequent figures:
 
-- `GetVARDraws.m` estimates the two-variable GDP-price VAR for the United States and euro area, identifying demand and supply shocks. It saves `draws/PQus_draws.mat` and `draws/PQea_draws.mat`, used by `Figure2.m`, `Figure3.m`, and `Figure12.m`.
-- `GetVARDrawsHT.m` estimates the GDP, prices-ex-energy, transport-energy, and household-energy VAR. It identifies demand, non-energy supply, and two energy-supply shocks using sign and additional energy-price restrictions. It saves `draws/PQHTus_draws.mat` and `draws/PQHTea_draws.mat`, used by `Figure5.m` and `Figure13.m`.
-- `GetVARDrawsRF.m` estimates the GDP, CPI, interest-rate, and primary-deficit VAR. It identifies monetary-policy, fiscal-policy, other-demand, and supply shocks. It saves `draws/PQRFus_draws.mat` and `draws/PQRFea_draws.mat`, used by `Figure6.m` and `Figure14.m`.
+- `GetVARDraws.m` estimates the two-variable GDP-price VAR for the United States and euro area, identifying demand and supply shocks. It saves `draws/PQus_draws.mat` and `draws/PQea_draws.mat`, used by `Figure2.m` and `Figure5.m`.
+- `GetVARDrawsHT.m` estimates the GDP, prices-ex-energy, transport-energy, and household-energy VAR. It identifies demand, non-energy supply, and two energy-supply shocks using sign and additional energy-specific restrictions. It saves `draws/PQHTeNRF_draws.mat`, used by `Figure6.m`.
+- `GetVARDrawsRF.m` estimates the GDP, CPI, interest-rate, and primary-deficit VAR. It identifies monetary-policy, fiscal-policy, other-demand, and supply shocks. It saves `draws/PQRFus_draws.mat` and `draws/PQRFea_draws.mat`, used by `Figure13.m` and `Figure14.m`.
 
-After the relevant draw script has run, execute `Figure2.m`, `Figure3.m`, `Figure5.m`, `Figure6.m`, `Figure13.m`, and `Figure14.m`. `Figure11.m` and `Figure12.m` run smaller estimations inline; `Figure12.m` also uses the baseline draws from `draws/PQus_draws.mat`.
+After the relevant draw script has run, execute `Figure2.m`, `Figure3.m`, `Figure5.m`, `Figure6.m`, `Figure13.m`, and `Figure14.m`. `Figure11.m` and `Figure12.m` run smaller estimations inline; `Figure7.m` is manual.
 
 `Figure3.m` additionally uses the included `data/SWcovid_quarterly.mat` file.
 
 ### DSGE
 
-`GetDSGEDraws.m` estimates the DSGE model. It first estimates the posterior mode, then runs an MCMC chain to obtain posterior parameter draws and computes the model objects and smoothed states needed by the analysis. It saves these results in `draws/DSGE_draws.mat`.
+`GetDSGEDraws.m` estimates the DSGE model. It first estimates the posterior mode, then runs an MCMC chain to obtain posterior parameter draws and computes the model objects and smoothed states needed by the subsequent figure and table scripts.
 
 Run `GetDSGEDraws.m`, then run `Figure8.m`, `Table1.m`, and `Table2.m`. If `data/DSGEData.mat` does not exist, build it as described in Section 4 first.
 
@@ -68,7 +68,7 @@ Run `Figure9.m` and `Figure10.m`.
 The repository includes prepared data, so these steps are optional. Each data source generally has two scripts:
 
 - **`Get*Data.m`** fetches raw series and saves them as CSV files under `data/raw/`. It requires internet access.
-- **`Prepare*Data.m`** reads those CSVs and performs chain-linking, quarterly aggregation, seasonal adjustment, and alignment before saving the `.mat` files used by the estimation and output scripts. It does not require internet access.
+- **`Prepare*Data.m`** reads those CSVs and performs chain-linking, quarterly aggregation, seasonal adjustment, and alignment before saving the `.mat` files used by the estimation and output scripts.
 
 The main data pipelines are:
 
@@ -91,7 +91,7 @@ The corresponding `Prepare*Data.m` scripts have their own `SOURCE` switch, so fe
 
 ## 5. Known differences between the Haver and public EA data
 
-The ECB and Haver euro-area HICP series are very similar but have slight differences. The public versions of the household-energy (COICOP 04.5) and transport-energy (COICOP 07.2.2) series are not seasonally adjusted; the code applies its own seasonal adjustment to these two series before using them.
+The ECB and Haver euro-area HICP series are very similar but have slight differences. The public versions of the household-energy (COICOP 04.5) and transport-energy (COICOP 07.2.2) series are not seasonally adjusted.
 
 For a detailed comparison, see [`VAR/data/HaverPublicComparison_EAEnergy.xlsx`](VAR/data/HaverPublicComparison_EAEnergy.xlsx). The workbook is generated by [`VAR/ComparePanels.m`](VAR/ComparePanels.m).
 
@@ -101,14 +101,14 @@ This repository vendors the following packages, unmodified except for removing u
 
 - **`VAR/GLP_PrePostCovid_ConstantCoeff/`** — the Bayesian VAR package used for posterior draws. Please cite:
 
-  > Domenico Giannone, Michele Lenza and Giorgio E. Primiceri (2015), “Prior Selection for Vector Autoregressions,” *The Review of Economics and Statistics*, 97(2), 436–451.
+  > Domenico Giannone, Michele Lenza and Giorgio E. Primiceri (2015), "Prior Selection for Vector Autoregressions," *The Review of Economics and Statistics*, 97(2), 436–451.
 
-  See the package’s own `README.md` for details.
+  See the package's own `README.md` for details.
 
-- **`DSGE/gensys/`** — Christopher Sims’ linear rational-expectations solver, used to solve the DSGE model. Please cite:
+- **`DSGE/gensys/`** — Christopher Sims' linear rational-expectations solver, used to solve the DSGE model. Please cite:
 
-  > Christopher A. Sims (2002), “Solving Linear Rational Expectations Models,” *Computational Economics*, 20(1–2), 1–20.
+  > Christopher A. Sims (2002), "Solving Linear Rational Expectations Models," *Computational Economics*, 20(1–2), 1–20.
 
-- **`DSGE/csminwel/`** — Christopher Sims’ quasi-Newton optimizer, used to maximize the DSGE posterior.
+- **`DSGE/csminwel/`** — Christopher Sims' quasi-Newton optimizer, used to maximize the DSGE posterior.
 
 All other code in this repository is original to this paper.
